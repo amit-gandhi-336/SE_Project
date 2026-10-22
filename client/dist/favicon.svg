@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Sage Forest Rounded Square Background -->
+  <rect width="64" height="64" rx="16" fill="#496B52"/>
+  
+  <!-- White Paw Print -->
+  <g fill="#FFFFFF">
+    <!-- Palm Pad -->
+    <path d="M32 47c-6.8 0-11.5-4.2-11.5-8.8 0-3.8 3.8-6.7 7.5-6.7 1.6 0 3 .6 4 1.7 1-1.1 2.4-1.7 4-1.7 3.7 0 7.5 2.9 7.5 6.7 0 4.6-4.7 8.8-11.5 8.8z"/>
+    <!-- Toe Pads -->
+    <ellipse cx="19.5" cy="27.5" rx="3.6" ry="4.8" transform="rotate(-15 19.5 27.5)"/>
+    <ellipse cx="27" cy="21" rx="3.8" ry="5.2" transform="rotate(-6 27 21)"/>
+    <ellipse cx="37" cy="21" rx="3.8" ry="5.2" transform="rotate(6 37 21)"/>
+    <ellipse cx="44.5" cy="27.5" rx="3.6" ry="4.8" transform="rotate(15 44.5 27.5)"/>
+  </g>
+</svg>

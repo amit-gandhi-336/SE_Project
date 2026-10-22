@@ -1,9 +1,11 @@
 /**
  * Automated Verification Test for Pet Adoption & Rescue Backend
- * Tests all 3 Sequence Diagrams from exp4.pdf and Class Diagram from image.png
+ * Tests all 3 Sequence Diagrams and Class Diagram models
  */
+process.env.NODE_ENV = 'test';
 const assert = require('assert');
 const { getDb } = require('../src/config/db');
+
 const { seedDb } = require('../src/database/seed');
 const User = require('../src/models/User');
 const Adopter = require('../src/models/Adopter');

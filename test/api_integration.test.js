@@ -134,11 +134,15 @@ async function testApiEndpoints() {
     const alertId = createAlertJson.alert.alertId;
     console.log(`✅ 9. Step 1-2: POST /api/rescue-alerts passed (Alert #${alertId})`);
 
-    // Assign Volunteer
+    // Assign Volunteer (dynamically look up seeded volunteer)
+    const { getDb } = require('../src/config/db');
+    const testVol = getDb().prepare("SELECT u.userId FROM users u JOIN volunteers v ON u.userId = v.userId WHERE u.role = 'Volunteer' LIMIT 1").get();
+    const volIdToAssign = testVol ? testVol.userId : 4;
+
     const assignRes = await fetch(`${baseUrl}/api/rescue-alerts/${alertId}/assign`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ volunteerId: 4 })
+      body: JSON.stringify({ volunteerId: volIdToAssign })
     });
     assert.strictEqual(assignRes.status, 200);
     console.log(`✅ 10. Step 3-4: POST /api/rescue-alerts/${alertId}/assign passed`);

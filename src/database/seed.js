@@ -20,6 +20,21 @@ function seedDb() {
   // Check if users already seeded
   const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
   if (userCount > 0) {
+    // Ensure Aryan Gosavi exists in existing database
+    const aryanUser = db.prepare('SELECT userId FROM users WHERE email = ?').get('aryan@spit.ac.in');
+    if (!aryanUser) {
+      const passwordHash = bcrypt.hashSync('Password@123', 10);
+      const insertUser = db.prepare(`
+        INSERT INTO users (name, email, password, phone, role)
+        VALUES (?, ?, ?, ?, ?)
+      `);
+      const aryanRes = insertUser.run('Aryan Gosavi', 'aryan@spit.ac.in', passwordHash, '+91-9876543299', 'ShelterWorker');
+      db.prepare(`
+        INSERT INTO shelter_workers (userId, employeeId, designation)
+        VALUES (?, ?, ?)
+      `).run(aryanRes.lastInsertRowid, 102, 'Senior Rescue & Triage Officer');
+      console.log('✅ Added Aryan Gosavi (ShelterWorker) to database.');
+    }
     console.log('ℹ️ Database already contains data. Skipping initial seeding.');
     return;
   }
@@ -41,6 +56,15 @@ function seedDb() {
     INSERT INTO shelter_workers (userId, employeeId, designation)
     VALUES (?, ?, ?)
   `).run(workerUserId, 101, 'Senior Animal Care Officer');
+
+  // User 1b: Shelter Worker (Aryan Gosavi)
+  const aryanRes = insertUser.run('Aryan Gosavi', 'aryan@spit.ac.in', passwordHash, '+91-9876543299', 'ShelterWorker');
+  const aryanUserId = aryanRes.lastInsertRowid;
+  db.prepare(`
+    INSERT INTO shelter_workers (userId, employeeId, designation)
+    VALUES (?, ?, ?)
+  `).run(aryanUserId, 102, 'Senior Rescue & Triage Officer');
+
 
   // User 2: Adopter (Priya Sharma)
   const adopterRes = insertUser.run('Priya Sharma', 'priya@gmail.com', passwordHash, '+91-9822012345', 'Adopter');
@@ -126,7 +150,7 @@ function seedDb() {
     'Fully Vaccinated',
     'Available',
     'Very loyal, trained in basic commands, great companion and protector.',
-    'https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&w=800&q=80',
     workerUserId,
     5
   );
@@ -143,10 +167,96 @@ function seedDb() {
     'Fully Vaccinated',
     'Pending',
     'Energetic beagle with curious nose and sweet personality.',
-    'https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80',
     workerUserId,
     2
   );
+
+  const pet5 = insertPet.run(
+    'Bella',
+    'Dog',
+    'Indie / Desi Hound Mix',
+    1,
+    'Female',
+    'Medium',
+    'Bhavan Shelter, Andheri West',
+    'Dewormed and microchipped',
+    'Fully Vaccinated',
+    'Available',
+    'Extremely gentle, affectionate rescue pup rescued from rain. House-trained and loves walks.',
+    'https://images.unsplash.com/photo-1561037404-61cd46aa615b?auto=format&fit=crop&w=800&q=80',
+    workerUserId,
+    4
+  );
+
+  const pet6 = insertPet.run(
+    'Whiskers',
+    'Cat',
+    'Persian Longhair',
+    2,
+    'Female',
+    'Small',
+    'Versova Rescue Wing',
+    'Coat groomed regularly, dental check clear',
+    'Fully Vaccinated',
+    'Available',
+    'Fluffy, tranquil Persian with gorgeous amber eyes. Quiet and wonderful indoor companion.',
+    'https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=800&q=80',
+    workerUserId,
+    2
+  );
+
+  const pet7 = insertPet.run(
+    'Oliver',
+    'Cat',
+    'British Shorthair',
+    3,
+    'Male',
+    'Medium',
+    'Versova Rescue Wing',
+    'None, healthy',
+    'Fully Vaccinated',
+    'Available',
+    'Dignified and calm cat who enjoys sunny windowsills and gentle chin scratches.',
+    'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=800&q=80',
+    workerUserId,
+    1
+  );
+
+  const pet8 = insertPet.run(
+    'Daisy',
+    'Dog',
+    'Labrador Retriever',
+    4,
+    'Female',
+    'Large',
+    'Juhu Foster Center',
+    'None, active and strong',
+    'Fully Vaccinated',
+    'Available',
+    'Loyal family dog, very patient with children, loves fetch and swimming.',
+    'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=80',
+    workerUserId,
+    6
+  );
+
+  const pet9 = insertPet.run(
+    'Simmba',
+    'Cat',
+    'Ginger Tabby',
+    2,
+    'Male',
+    'Small',
+    'Bhavan Shelter, Andheri West',
+    'None',
+    'Fully Vaccinated',
+    'Available',
+    'Spirited, adventurous ginger cat with a big purr and endless curiosity.',
+    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=800&q=80',
+    workerUserId,
+    3
+  );
+
 
   // 3. Insert Adoption Applications
   const insertApp = db.prepare(`
